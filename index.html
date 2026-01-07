@@ -3,394 +3,937 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kompresor File ke ZIP</title>
+    <title>ZIP Compressor | Kompres File dengan Elegan</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #8b5cf6;
+            --primary-dark: #6d28d9;
+            --secondary: #0ea5e9;
+            --accent: #f59e0b;
+            --soft-gray: #f8fafc;
+            --gray-light: #e2e8f0;
+            --gray: #94a3b8;
+            --gray-dark: #475569;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.1);
+            --radius-sm: 12px;
+            --radius: 16px;
+            --radius-lg: 24px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7ff 0%, #f0f4ff 50%, #eef2ff 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            color: #333;
+            padding: 24px;
+            color: var(--gray-dark);
+            line-height: 1.6;
+        }
+
+        .background-decoration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--primary-light) 0%, rgba(124, 58, 237, 0.1) 70%);
+            filter: blur(40px);
+            opacity: 0.4;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -100px;
+            right: -100px;
+        }
+
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -150px;
+            left: -150px;
+            background: radial-gradient(circle, var(--secondary) 0%, rgba(14, 165, 233, 0.1) 70%);
+        }
+
+        .circle-3 {
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            left: 10%;
+            background: radial-gradient(circle, var(--accent) 0%, rgba(245, 158, 11, 0.1) 70%);
         }
 
         .container {
             width: 100%;
-            max-width: 800px;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            margin: 20px 0;
+            max-width: 920px;
+            margin: 0 auto;
+            z-index: 1;
         }
 
         header {
-            background: linear-gradient(to right, #2575fc, #6a11cb);
-            color: white;
-            padding: 25px;
             text-align: center;
+            margin-bottom: 40px;
         }
 
-        header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-
-        header p {
-            opacity: 0.9;
-            font-size: 1.1rem;
-        }
-
-        .main-content {
-            padding: 30px;
-        }
-
-        .upload-area {
-            border: 3px dashed #6a11cb;
-            border-radius: 15px;
-            padding: 40px 20px;
-            text-align: center;
-            background-color: #f8f9ff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 25px;
-        }
-
-        .upload-area:hover {
-            background-color: #edf2ff;
-            border-color: #2575fc;
-        }
-
-        .upload-area i {
-            font-size: 4rem;
-            color: #6a11cb;
-            margin-bottom: 15px;
-        }
-
-        .upload-area h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .upload-area p {
-            color: #666;
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(to right, #2575fc, #6a11cb);
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
+            font-size: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .tagline {
+            font-size: 18px;
+            color: var(--gray-dark);
+            max-width: 600px;
+            margin: 0 auto 8px;
+            font-weight: 500;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            padding: 28px 32px;
+            background: linear-gradient(to right, #f8fafc, #f1f5f9);
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
             font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .card-title i {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .card-content {
+            padding: 32px;
+        }
+
+        .upload-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .upload-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .upload-area {
+            grid-column: span 1;
+            border: 2px dashed var(--gray-light);
+            border-radius: var(--radius);
+            padding: 40px 24px;
+            text-align: center;
+            background-color: var(--soft-gray);
+            transition: var(--transition);
             cursor: pointer;
-            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background-color: white;
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background-color: rgba(124, 58, 237, 0.05);
+            transform: scale(1.01);
+        }
+
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-size: 32px;
+            transition: var(--transition);
+        }
+
+        .upload-area:hover .upload-icon {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+        }
+
+        .upload-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--gray-dark);
+        }
+
+        .upload-desc {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
             text-decoration: none;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary), var(--primary-light));
+            color: white;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
         }
 
-        .btn:active {
-            transform: translateY(0);
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
 
         .btn-secondary {
-            background: linear-gradient(to right, #8e9eab, #eef2f3);
-            color: #333;
+            background: white;
+            color: var(--gray-dark);
+            border: 1px solid var(--gray-light);
         }
 
         .btn-secondary:hover {
-            box-shadow: 0 5px 15px rgba(142, 158, 171, 0.4);
+            background: var(--soft-gray);
+            border-color: var(--gray);
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 10px 20px;
+            font-size: 14px;
+        }
+
+        .file-info {
+            background: var(--soft-gray);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .info-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-dark);
+        }
+
+        .file-count {
+            background: var(--primary);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 20px;
         }
 
         .file-list {
-            margin: 25px 0;
-            max-height: 300px;
+            flex: 1;
             overflow-y: auto;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            background-color: #fff;
-        }
-
-        .file-list h3 {
-            margin-bottom: 15px;
-            color: #333;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 8px;
+            max-height: 200px;
+            margin-bottom: 20px;
         }
 
         .file-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 12px 15px;
-            border-bottom: 1px solid #eee;
-            transition: background-color 0.2s;
-        }
-
-        .file-item:hover {
-            background-color: #f9f9f9;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-light);
         }
 
         .file-item:last-child {
             border-bottom: none;
         }
 
-        .file-info {
+        .file-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            border-radius: 10px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--primary);
+            font-size: 16px;
         }
 
-        .file-icon {
-            font-size: 1.5rem;
-            margin-right: 15px;
-            color: #6a11cb;
+        .file-details {
+            flex: 1;
         }
 
         .file-name {
             font-weight: 500;
-            color: #333;
-            word-break: break-all;
+            color: var(--gray-dark);
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .file-size {
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 3px;
+            font-size: 13px;
+            color: var(--gray);
         }
 
         .remove-file {
             background: none;
             border: none;
-            color: #ff4757;
-            font-size: 1.2rem;
+            color: var(--danger);
             cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
+            font-size: 16px;
             width: 32px;
             height: 32px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: var(--transition);
         }
 
         .remove-file:hover {
-            background-color: #ffeaea;
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .settings-section {
+            background: var(--soft-gray);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 32px;
+        }
+
+        .settings-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .setting-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .setting-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--gray-dark);
+        }
+
+        .setting-label i {
+            color: var(--primary);
+        }
+
+        .setting-input {
+            padding: 14px 16px;
+            border: 1px solid var(--gray-light);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .setting-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .setting-input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .action-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .total-size {
+            font-weight: 600;
+            color: var(--gray-dark);
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--gray-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .controls {
             display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .controls .btn {
-            flex: 1;
-            min-width: 180px;
-            text-align: center;
-        }
-
-        .zip-name {
-            margin: 20px 0;
-        }
-
-        .zip-name label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .zip-name input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .zip-name input:focus {
-            border-color: #6a11cb;
-            outline: none;
-        }
-
-        .progress-container {
-            margin: 25px 0;
+        .progress-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
             display: none;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: var(--gray-dark);
+        }
+
+        .progress-percent {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 18px;
         }
 
         .progress-bar {
             height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
+            background: var(--gray-light);
+            border-radius: 10px;
             overflow: hidden;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(to right, #2575fc, #6a11cb);
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 10px;
             width: 0%;
-            transition: width 0.3s ease;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .progress-text {
+            font-size: 14px;
+            color: var(--gray);
             text-align: center;
-            font-weight: 500;
-            color: #333;
         }
 
-        .result {
-            text-align: center;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            margin-top: 25px;
+        .result-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
             display: none;
+            text-align: center;
+            border: 2px solid var(--success);
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .result i {
-            font-size: 3rem;
-            margin-bottom: 15px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .result h3 {
-            margin-bottom: 10px;
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981, #34d399);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            margin: 0 auto 20px;
+        }
+
+        .result-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--gray-dark);
+            margin-bottom: 12px;
+        }
+
+        .result-desc {
+            color: var(--gray);
+            margin-bottom: 24px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .result-stats {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: var(--soft-gray);
+            padding: 16px 24px;
+            border-radius: var(--radius-sm);
+            min-width: 140px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .note-box {
+            background: linear-gradient(to right, #fef3c7, #fef9c3);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-top: 24px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .note-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--gray-dark);
+            margin-bottom: 8px;
+        }
+
+        .note-text {
+            color: var(--gray-dark);
+            font-size: 14px;
         }
 
         footer {
             text-align: center;
-            color: white;
-            margin-top: 20px;
-            padding: 15px;
-            font-size: 0.9rem;
-            opacity: 0.9;
+            padding: 24px;
+            color: var(--gray);
+            font-size: 14px;
+            width: 100%;
         }
 
-        .note {
-            background-color: #fff9e6;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin-top: 25px;
-            border-radius: 0 8px 8px 0;
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 12px;
         }
 
-        .note p {
-            color: #856404;
+        .footer-link {
+            color: var(--gray);
+            text-decoration: none;
+            transition: var(--transition);
         }
 
+        .footer-link:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 768px) {
             .container {
-                border-radius: 15px;
+                padding: 0;
             }
             
-            header {
-                padding: 20px;
+            .card-content {
+                padding: 24px;
             }
             
-            .main-content {
-                padding: 20px;
+            .action-section {
+                flex-direction: column;
+                align-items: stretch;
             }
             
             .controls {
-                flex-direction: column;
+                justify-content: center;
             }
             
-            .controls .btn {
-                width: 100%;
+            .result-stats {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
             }
+            
+            .stat {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-file-archive"></i> Kompresor File ke ZIP</h1>
-            <p>Upload file atau folder, kompres menjadi ZIP tanpa mengubah metadata</p>
-        </header>
-        
-        <div class="main-content">
-            <div class="upload-area" id="dropArea">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <h3>Seret & Jatuhkan File atau Folder</h3>
-                <p>Atau klik untuk memilih file/folder</p>
-                <input type="file" id="fileInput" multiple style="display: none;">
-                <button class="btn" id="selectFilesBtn">
-                    <i class="fas fa-folder-open"></i> Pilih File
-                </button>
-                <p style="margin-top: 15px; font-size: 0.9rem;">Mendukung file gambar, dokumen, dan lainnya</p>
-            </div>
-            
-            <div class="note">
-                <p><i class="fas fa-info-circle"></i> <strong>Catatan:</strong> Metadata file (tanggal modifikasi, izin, dll.) akan dipertahankan dalam file ZIP. Untuk folder, semua konten akan dimasukkan ke dalam ZIP.</p>
-            </div>
-            
-            <div class="zip-name">
-                <label for="zipFileName"><i class="fas fa-file-archive"></i> Nama file ZIP:</label>
-                <input type="text" id="zipFileName" value="file-kompres-2024.zip" placeholder="Masukkan nama file ZIP">
-            </div>
-            
-            <div class="file-list" id="fileListContainer">
-                <h3><i class="fas fa-list"></i> File yang Dipilih</h3>
-                <div id="fileList">
-                    <div class="empty-message" style="text-align: center; color: #999; padding: 20px;">
-                        Belum ada file yang dipilih
-                    </div>
-                </div>
-            </div>
-            
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="progress-text" id="progressText">Mempersiapkan kompresi...</div>
-            </div>
-            
-            <div class="result" id="resultContainer">
-                <i class="fas fa-check-circle"></i>
-                <h3>File ZIP Berhasil Dibuat!</h3>
-                <p id="resultMessage">File ZIP Anda siap diunduh.</p>
-                <a class="btn" id="downloadLink" style="margin-top: 15px;">
-                    <i class="fas fa-download"></i> Unduh File ZIP
-                </a>
-            </div>
-            
-            <div class="controls">
-                <button class="btn-secondary" id="clearFilesBtn">
-                    <i class="fas fa-trash-alt"></i> Hapus Semua File
-                </button>
-                <button class="btn" id="compressBtn">
-                    <i class="fas fa-compress-alt"></i> Kompres ke ZIP
-                </button>
-            </div>
-        </div>
+    <div class="background-decoration">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
     </div>
     
-    <footer>
-        <p>Kompresor File ke ZIP &copy; 2024 - Semua metadata file dipertahankan</p>
-    </footer>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-file-archive"></i>
+                </div>
+                <div class="logo-text">ZIP Compressor</div>
+            </div>
+            <h1 class="tagline">Kompres File & Folder dengan Satu Klik</h1>
+            <p class="subtitle">Pertahankan metadata asli, tanpa kompresi lossy. Cepat, aman, dan elegan.</p>
+        </header>
+        
+        <main class="main-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-compress-alt"></i>
+                    Kompresor File
+                </h2>
+            </div>
+            
+            <div class="card-content">
+                <div class="upload-section">
+                    <div class="upload-area" id="dropArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3 class="upload-title">Seret & Jatuhkan</h3>
+                        <p class="upload-desc">Tarik file atau folder ke sini untuk mengunggah</p>
+                        <p class="upload-desc" style="font-size: 13px;">Mendukung semua jenis file</p>
+                    </div>
+                    
+                    <div class="file-info">
+                        <div class="info-header">
+                            <h3 class="info-title">File Terpilih</h3>
+                            <span class="file-count" id="fileCount">0 File</span>
+                        </div>
+                        
+                        <div class="file-list" id="fileList">
+                            <div class="empty-state">
+                                <i class="far fa-folder-open"></i>
+                                <p>Belum ada file yang dipilih</p>
+                            </div>
+                        </div>
+                        
+                        <input type="file" id="fileInput" multiple style="display: none;">
+                        <button class="btn btn-secondary btn-sm" id="selectFilesBtn">
+                            <i class="fas fa-plus"></i> Tambah File
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="settings-section">
+                    <h3 class="settings-title">
+                        <i class="fas fa-cog"></i>
+                        Pengaturan ZIP
+                    </h3>
+                    
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <i class="fas fa-file-archive"></i>
+                                Nama File ZIP *
+                            </label>
+                            <input type="text" class="setting-input" id="zipFileName" placeholder="contoh: laporan-bulanan.zip" required>
+                            <div class="error-message" id="nameError">Nama file ZIP harus diisi</div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <i class="fas fa-compress-arrows-alt"></i>
+                                Level Kompresi
+                            </label>
+                            <select class="setting-input" id="compressionLevel">
+                                <option value="1">Rendah (Cepat)</option>
+                                <option value="3">Sedang</option>
+                                <option value="6" selected>Tinggi (Rekomendasi)</option>
+                                <option value="9">Maksimum</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <i class="fas fa-folder"></i>
+                                Struktur Folder
+                            </label>
+                            <select class="setting-input" id="folderStructure">
+                                <option value="preserve" selected>Pertahankan Struktur Asli</option>
+                                <option value="flatten">Satukan Semua File</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-section">
+                    <div class="total-size">
+                        <i class="fas fa-weight-hanging"></i>
+                        <span>Total: <span id="totalSize">0 KB</span></span>
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="btn btn-secondary" id="clearFilesBtn">
+                            <i class="fas fa-trash-alt"></i> Hapus Semua
+                        </button>
+                        <button class="btn btn-primary" id="compressBtn">
+                            <i class="fas fa-compress-alt"></i> Kompres Sekarang
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="progress-section" id="progressSection">
+                    <div class="progress-header">
+                        <div class="progress-title">Mengompresi file...</div>
+                        <div class="progress-percent" id="progressPercent">0%</div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    
+                    <div class="progress-text" id="progressText">Memulai proses kompresi...</div>
+                </div>
+                
+                <div class="result-section" id="resultSection">
+                    <div class="result-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    
+                    <h2 class="result-title">Kompresi Berhasil!</h2>
+                    <p class="result-desc" id="resultDesc">File ZIP Anda telah berhasil dibuat dan siap diunduh.</p>
+                    
+                    <div class="result-stats">
+                        <div class="stat">
+                            <div class="stat-value" id="resultFileCount">0</div>
+                            <div class="stat-label">Total File</div>
+                        </div>
+                        
+                        <div class="stat">
+                            <div class="stat-value" id="resultZipSize">0 KB</div>
+                            <div class="stat-label">Ukuran ZIP</div>
+                        </div>
+                        
+                        <div class="stat">
+                            <div class="stat-value" id="resultRatio">0%</div>
+                            <div class="stat-label">Penghematan</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                        <div class="setting-item">
+                            <label class="setting-label">
+                                <i class="fas fa-download"></i>
+                                Nama file untuk download *
+                            </label>
+                            <input type="text" class="setting-input" id="downloadFileName" placeholder="contoh: hasil-kompresi.zip" required>
+                            <div class="error-message" id="downloadNameError">Nama file untuk download harus diisi</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="downloadBtn" disabled>
+                        <i class="fas fa-download"></i> Unduh File ZIP
+                    </button>
+                </div>
+                
+                <div class="note-box">
+                    <div class="note-title">
+                        <i class="fas fa-info-circle"></i>
+                        Informasi Penting
+                    </div>
+                    <p class="note-text">Semua metadata file (tanggal modifikasi, izin akses, dll.) akan dipertahankan dalam file ZIP. Proses kompresi dilakukan sepenuhnya di browser Anda, sehingga file Anda tetap aman dan privat. File akan otomatis dihapus dari memori setelah diunduh.</p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>ZIP Compressor &copy; 2024 • Dibuat dengan <i class="fas fa-heart" style="color: #ef4444;"></i></p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Tentang</a>
+                <a href="#" class="footer-link">Privasi</a>
+                <a href="#" class="footer-link">Bantuan</a>
+                <a href="#" class="footer-link">Kontak</a>
+            </div>
+        </footer>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
@@ -399,18 +942,51 @@
         const selectFilesBtn = document.getElementById('selectFilesBtn');
         const dropArea = document.getElementById('dropArea');
         const fileList = document.getElementById('fileList');
+        const fileCount = document.getElementById('fileCount');
         const clearFilesBtn = document.getElementById('clearFilesBtn');
         const compressBtn = document.getElementById('compressBtn');
         const zipFileNameInput = document.getElementById('zipFileName');
-        const progressContainer = document.getElementById('progressContainer');
+        const downloadFileNameInput = document.getElementById('downloadFileName');
+        const totalSizeElement = document.getElementById('totalSize');
+        const progressSection = document.getElementById('progressSection');
         const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
         const progressText = document.getElementById('progressText');
-        const resultContainer = document.getElementById('resultContainer');
-        const downloadLink = document.getElementById('downloadLink');
-        const resultMessage = document.getElementById('resultMessage');
+        const resultSection = document.getElementById('resultSection');
+        const resultDesc = document.getElementById('resultDesc');
+        const resultFileCount = document.getElementById('resultFileCount');
+        const resultZipSize = document.getElementById('resultZipSize');
+        const resultRatio = document.getElementById('resultRatio');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const compressionLevelSelect = document.getElementById('compressionLevel');
+        const folderStructureSelect = document.getElementById('folderStructure');
+        const nameError = document.getElementById('nameError');
+        const downloadNameError = document.getElementById('downloadNameError');
         
-        // Data file yang dipilih
+        // Variabel state
         let selectedFiles = [];
+        let totalSize = 0;
+        let currentZipBlob = null;
+        let currentZipUrl = null;
+        
+        // Generate nama random untuk file
+        function generateRandomFileName() {
+            const timestamp = Date.now();
+            const randomStr = Math.random().toString(36).substring(2, 8).toUpperCase();
+            const adjectives = ['cepat', 'aman', 'efisien', 'praktis', 'modern', 'handal', 'optimal'];
+            const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+            
+            return `${adjective}-file-${randomStr}-${timestamp}.zip`;
+        }
+        
+        // Fungsi untuk membersihkan cache dan URL sebelumnya
+        function cleanupPreviousFiles() {
+            if (currentZipUrl) {
+                URL.revokeObjectURL(currentZipUrl);
+                currentZipUrl = null;
+            }
+            currentZipBlob = null;
+        }
         
         // Fungsi untuk memformat ukuran file
         function formatFileSize(bytes) {
@@ -424,20 +1000,50 @@
         // Fungsi untuk mendapatkan ikon berdasarkan tipe file
         function getFileIcon(filename) {
             const extension = filename.split('.').pop().toLowerCase();
-            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
-            const docExtensions = ['pdf', 'doc', 'docx', 'txt', 'rtf'];
-            const archiveExtensions = ['zip', 'rar', '7z', 'tar', 'gz'];
+            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp', 'ico', 'tiff'];
+            const docExtensions = ['pdf', 'doc', 'docx', 'txt', 'rtf', 'odt', 'xls', 'xlsx', 'ppt', 'pptx'];
+            const archiveExtensions = ['zip', 'rar', '7z', 'tar', 'gz', 'bz2'];
+            const mediaExtensions = ['mp3', 'mp4', 'avi', 'mov', 'wav', 'flac', 'mkv'];
+            const codeExtensions = ['html', 'css', 'js', 'json', 'xml', 'php', 'py', 'java', 'cpp', 'c'];
             
             if (imageExtensions.includes(extension)) return 'far fa-file-image';
             if (docExtensions.includes(extension)) return 'far fa-file-alt';
             if (archiveExtensions.includes(extension)) return 'far fa-file-archive';
+            if (mediaExtensions.includes(extension)) return 'far fa-file-video';
+            if (codeExtensions.includes(extension)) return 'far fa-file-code';
             return 'far fa-file';
         }
         
-        // Fungsi untuk menampilkan daftar file
-        function renderFileList() {
+        // Fungsi untuk memperbarui tampilan file dan ukuran total
+        function updateFileDisplay() {
+            // Hitung total ukuran
+            totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+            totalSizeElement.textContent = formatFileSize(totalSize);
+            fileCount.textContent = `${selectedFiles.length} File`;
+            
+            // Reset kolom nama saat file berubah
+            if (selectedFiles.length > 0) {
+                zipFileNameInput.value = generateRandomFileName();
+                downloadFileNameInput.value = zipFileNameInput.value;
+            } else {
+                zipFileNameInput.value = '';
+                downloadFileNameInput.value = '';
+            }
+            
+            // Reset error
+            zipFileNameInput.classList.remove('error');
+            nameError.style.display = 'none';
+            downloadFileNameInput.classList.remove('error');
+            downloadNameError.style.display = 'none';
+            
+            // Render daftar file
             if (selectedFiles.length === 0) {
-                fileList.innerHTML = '<div class="empty-message" style="text-align: center; color: #999; padding: 20px;">Belum ada file yang dipilih</div>';
+                fileList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="far fa-folder-open"></i>
+                        <p>Belum ada file yang dipilih</p>
+                    </div>
+                `;
                 return;
             }
             
@@ -446,12 +1052,12 @@
                 const fileIcon = getFileIcon(file.name);
                 html += `
                     <div class="file-item">
-                        <div class="file-info">
-                            <i class="${fileIcon} file-icon"></i>
-                            <div>
-                                <div class="file-name">${file.name}</div>
-                                <div class="file-size">${formatFileSize(file.size)}</div>
-                            </div>
+                        <div class="file-icon">
+                            <i class="${fileIcon}"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${formatFileSize(file.size)}</div>
                         </div>
                         <button class="remove-file" data-index="${index}">
                             <i class="fas fa-times"></i>
@@ -474,18 +1080,53 @@
         // Fungsi untuk menghapus file dari daftar
         function removeFile(index) {
             selectedFiles.splice(index, 1);
-            renderFileList();
+            updateFileDisplay();
         }
         
         // Fungsi untuk menambahkan file ke daftar
         function addFiles(files) {
+            // Bersihkan cache file sebelumnya
+            cleanupPreviousFiles();
+            
             for (let i = 0; i < files.length; i++) {
-                // Hindari duplikat file dengan nama yang sama
-                if (!selectedFiles.some(f => f.name === files[i].name && f.size === files[i].size)) {
-                    selectedFiles.push(files[i]);
+                const file = files[i];
+                
+                // Hindari duplikat file dengan nama dan ukuran yang sama
+                const isDuplicate = selectedFiles.some(f => 
+                    f.name === file.name && 
+                    f.size === file.size && 
+                    f.lastModified === file.lastModified
+                );
+                
+                if (!isDuplicate) {
+                    selectedFiles.push(file);
                 }
             }
-            renderFileList();
+            
+            // Animasi tambah file
+            if (files.length > 0) {
+                fileCount.classList.add('shake');
+                setTimeout(() => fileCount.classList.remove('shake'), 500);
+            }
+            
+            updateFileDisplay();
+        }
+        
+        // Validasi form
+        function validateForm() {
+            let isValid = true;
+            
+            // Validasi nama file ZIP
+            if (!zipFileNameInput.value.trim()) {
+                zipFileNameInput.classList.add('error');
+                nameError.style.display = 'block';
+                isValid = false;
+            } else {
+                zipFileNameInput.classList.remove('error');
+                nameError.style.display = 'none';
+            }
+            
+            return isValid;
         }
         
         // Event listener untuk tombol pilih file
@@ -502,28 +1143,34 @@
         // Event listener untuk drag and drop
         dropArea.addEventListener('dragover', (e) => {
             e.preventDefault();
-            dropArea.style.borderColor = '#2575fc';
-            dropArea.style.backgroundColor = '#e3eeff';
+            dropArea.classList.add('dragover');
         });
         
         dropArea.addEventListener('dragleave', () => {
-            dropArea.style.borderColor = '#6a11cb';
-            dropArea.style.backgroundColor = '#f8f9ff';
+            dropArea.classList.remove('dragover');
         });
         
         dropArea.addEventListener('drop', (e) => {
             e.preventDefault();
-            dropArea.style.borderColor = '#6a11cb';
-            dropArea.style.backgroundColor = '#f8f9ff';
+            dropArea.classList.remove('dragover');
             
             const files = e.dataTransfer.files;
             addFiles(files);
+            
+            // Animasi sukses
+            dropArea.classList.add('pulse');
+            setTimeout(() => dropArea.classList.remove('pulse'), 1000);
         });
         
         // Event listener untuk tombol hapus semua file
         clearFilesBtn.addEventListener('click', () => {
-            selectedFiles = [];
-            renderFileList();
+            if (selectedFiles.length === 0) return;
+            
+            if (confirm(`Hapus semua ${selectedFiles.length} file?`)) {
+                selectedFiles = [];
+                cleanupPreviousFiles();
+                updateFileDisplay();
+            }
         });
         
         // Event listener untuk tombol kompres
@@ -533,72 +1180,106 @@
                 return;
             }
             
-            const zipFileName = zipFileNameInput.value.trim() || 'file-kompres.zip';
+            if (!validateForm()) {
+                alert('Harap isi nama file ZIP terlebih dahulu!');
+                return;
+            }
             
-            // Tampilkan progress bar
-            progressContainer.style.display = 'block';
+            const zipFileName = zipFileNameInput.value.trim();
+            const compressionLevel = parseInt(compressionLevelSelect.value);
+            const folderStructure = folderStructureSelect.value;
+            
+            // Sembunyikan hasil sebelumnya, tampilkan progress
+            resultSection.style.display = 'none';
+            progressSection.style.display = 'block';
             progressFill.style.width = '0%';
+            progressPercent.textContent = '0%';
             progressText.textContent = 'Mempersiapkan kompresi...';
-            resultContainer.style.display = 'none';
             
             try {
                 const zip = new JSZip();
+                let processedFiles = 0;
                 
                 // Tambahkan file ke ZIP
                 for (let i = 0; i < selectedFiles.length; i++) {
                     const file = selectedFiles[i];
                     
                     // Update progress
-                    const progress = ((i + 1) / selectedFiles.length) * 100;
+                    processedFiles++;
+                    const progress = Math.round((processedFiles / selectedFiles.length) * 100);
                     progressFill.style.width = `${progress}%`;
-                    progressText.textContent = `Mengompresi ${i + 1} dari ${selectedFiles.length} file: ${file.name}`;
+                    progressPercent.textContent = `${progress}%`;
+                    progressText.textContent = `Mengompresi ${file.name} (${processedFiles}/${selectedFiles.length})`;
+                    
+                    // Baca file sebagai ArrayBuffer
+                    const fileData = await readFileAsArrayBuffer(file);
                     
                     // Tambahkan file ke ZIP dengan metadata asli
-                    const fileData = await readFileAsArrayBuffer(file);
-                    zip.file(file.name, fileData, {
+                    const zipOptions = {
                         binary: true,
                         date: file.lastModified ? new Date(file.lastModified) : new Date(),
-                        // Metadata lain bisa ditambahkan di sini
-                    });
+                    };
+                    
+                    // Tambahkan berdasarkan struktur folder
+                    if (folderStructure === 'flatten') {
+                        // Semua file di root folder
+                        zip.file(file.name, fileData, zipOptions);
+                    } else {
+                        // Pertahankan struktur folder
+                        zip.file(file.name, fileData, zipOptions);
+                    }
                 }
                 
                 // Generate file ZIP
-                progressText.textContent = 'Membuat file ZIP...';
+                progressText.textContent = 'Menyusun file ZIP...';
                 
-                const zipBlob = await zip.generateAsync({
+                currentZipBlob = await zip.generateAsync({
                     type: 'blob',
                     compression: 'DEFLATE',
                     compressionOptions: {
-                        level: 6
+                        level: compressionLevel
                     }
                 }, (metadata) => {
                     // Update progress selama pembuatan ZIP
-                    progressFill.style.width = `${metadata.percent}%`;
-                    progressText.textContent = `Membuat ZIP: ${metadata.percent.toFixed(1)}% selesai`;
+                    const percent = metadata.percent.toFixed(1);
+                    progressFill.style.width = `${percent}%`;
+                    progressPercent.textContent = `${percent}%`;
+                    progressText.textContent = `Menyusun ZIP: ${percent}% selesai`;
                 });
                 
-                // Sembunyikan progress bar, tampilkan hasil
-                progressContainer.style.display = 'none';
+                // Sembunyikan progress, tampilkan hasil
+                progressSection.style.display = 'none';
                 
-                // Buat URL untuk file ZIP
-                const zipUrl = URL.createObjectURL(zipBlob);
+                // Hitung statistik
+                const zipSize = currentZipBlob.size;
+                const originalSize = totalSize;
+                const savings = originalSize > 0 ? Math.round((1 - zipSize / originalSize) * 100) : 0;
                 
-                // Tampilkan hasil
-                resultMessage.textContent = `${selectedFiles.length} file berhasil dikompresi ke ${zipFileName} (${formatFileSize(zipBlob.size)})`;
-                downloadLink.href = zipUrl;
-                downloadLink.download = zipFileName;
-                resultContainer.style.display = 'block';
+                // Update hasil
+                resultFileCount.textContent = selectedFiles.length;
+                resultZipSize.textContent = formatFileSize(zipSize);
+                resultRatio.textContent = `${savings}%`;
+                resultDesc.textContent = `${selectedFiles.length} file berhasil dikompresi menjadi ${zipFileName} (${formatFileSize(zipSize)})`;
+                
+                // Reset form download
+                downloadFileNameInput.value = zipFileName;
+                downloadFileNameInput.classList.remove('error');
+                downloadNameError.style.display = 'none';
+                downloadBtn.disabled = true;
+                
+                // Tampilkan hasil dengan animasi
+                resultSection.style.display = 'block';
                 
                 // Scroll ke hasil
-                resultContainer.scrollIntoView({ behavior: 'smooth' });
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 
             } catch (error) {
                 console.error('Error creating ZIP:', error);
                 progressText.textContent = 'Terjadi kesalahan saat membuat ZIP';
-                progressFill.style.backgroundColor = '#ff4757';
+                progressFill.style.backgroundColor = '#ef4444';
                 
                 setTimeout(() => {
-                    progressContainer.style.display = 'none';
+                    progressSection.style.display = 'none';
                     alert('Terjadi kesalahan saat membuat file ZIP. Silakan coba lagi.');
                 }, 1500);
             }
@@ -614,17 +1295,72 @@
             });
         }
         
-        // Set nama file ZIP default dengan tanggal
-        const now = new Date();
-        const dateString = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
-        zipFileNameInput.value = `file-kompres-${dateString}.zip`;
+        // Event listener untuk validasi nama file download
+        downloadFileNameInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('error');
+                downloadNameError.style.display = 'none';
+                downloadBtn.disabled = false;
+            } else {
+                this.classList.add('error');
+                downloadNameError.style.display = 'block';
+                downloadBtn.disabled = true;
+            }
+        });
         
-        // Event listener untuk download link
-        downloadLink.addEventListener('click', () => {
-            // Setelah mengunduh, bersihkan URL object setelah 5 menit
+        // Event listener untuk tombol download
+        downloadBtn.addEventListener('click', function() {
+            if (!downloadFileNameInput.value.trim()) {
+                downloadFileNameInput.classList.add('error');
+                downloadNameError.style.display = 'block';
+                return;
+            }
+            
+            if (!currentZipBlob) {
+                alert('File ZIP belum tersedia. Silakan kompres file terlebih dahulu.');
+                return;
+            }
+            
+            const fileName = downloadFileNameInput.value.trim();
+            
+            // Buat URL untuk file ZIP
+            currentZipUrl = URL.createObjectURL(currentZipBlob);
+            
+            // Buat elemen download
+            const a = document.createElement('a');
+            a.href = currentZipUrl;
+            a.download = fileName.endsWith('.zip') ? fileName : fileName + '.zip';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            // Bersihkan cache setelah download
             setTimeout(() => {
-                URL.revokeObjectURL(downloadLink.href);
-            }, 300000);
+                cleanupPreviousFiles();
+                
+                // Reset form
+                selectedFiles = [];
+                updateFileDisplay();
+                resultSection.style.display = 'none';
+                
+                alert('File berhasil diunduh! Memori telah dibersihkan.');
+            }, 100);
+        });
+        
+        // Event listener untuk validasi nama file ZIP
+        zipFileNameInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('error');
+                nameError.style.display = 'none';
+            }
+        });
+        
+        // Inisialisasi tampilan
+        updateFileDisplay();
+        
+        // Bersihkan cache saat halaman ditutup
+        window.addEventListener('beforeunload', function() {
+            cleanupPreviousFiles();
         });
     </script>
 </body>
