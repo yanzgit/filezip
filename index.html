@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompresor File ke ZIP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        header {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .upload-area {
+            border: 3px dashed #6a11cb;
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            background-color: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+
+        .upload-area:hover {
+            background-color: #edf2ff;
+            border-color: #2575fc;
+        }
+
+        .upload-area i {
+            font-size: 4rem;
+            color: #6a11cb;
+            margin-bottom: 15px;
+        }
+
+        .upload-area h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .upload-area p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(to right, #8e9eab, #eef2f3);
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(142, 158, 171, 0.4);
+        }
+
+        .file-list {
+            margin: 25px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        .file-list h3 {
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+
+        .file-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .file-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: #6a11cb;
+        }
+
+        .file-name {
+            font-weight: 500;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .file-size {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 3px;
+        }
+
+        .remove-file {
+            background: none;
+            border: none;
+            color: #ff4757;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remove-file:hover {
+            background-color: #ffeaea;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .controls .btn {
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .zip-name {
+            margin: 20px 0;
+        }
+
+        .zip-name label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .zip-name input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .zip-name input:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        .progress-container {
+            margin: 25px 0;
+            display: none;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .result {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            margin-top: 25px;
+            display: none;
+        }
+
+        .result i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .result h3 {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .note {
+            background-color: #fff9e6;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .note p {
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 15px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .controls .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-file-archive"></i> Kompresor File ke ZIP</h1>
+            <p>Upload file atau folder, kompres menjadi ZIP tanpa mengubah metadata</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="upload-area" id="dropArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Seret & Jatuhkan File atau Folder</h3>
+                <p>Atau klik untuk memilih file/folder</p>
+                <input type="file" id="fileInput" multiple style="display: none;">
+                <button class="btn" id="selectFilesBtn">
+                    <i class="fas fa-folder-open"></i> Pilih File
+                </button>
+                <p style="margin-top: 15px; font-size: 0.9rem;">Mendukung file gambar, dokumen, dan lainnya</p>
+            </div>
+            
+            <div class="note">
+                <p><i class="fas fa-info-circle"></i> <strong>Catatan:</strong> Metadata file (tanggal modifikasi, izin, dll.) akan dipertahankan dalam file ZIP. Untuk folder, semua konten akan dimasukkan ke dalam ZIP.</p>
+            </div>
+            
+            <div class="zip-name">
+                <label for="zipFileName"><i class="fas fa-file-archive"></i> Nama file ZIP:</label>
+                <input type="text" id="zipFileName" value="file-kompres-2024.zip" placeholder="Masukkan nama file ZIP">
+            </div>
+            
+            <div class="file-list" id="fileListContainer">
+                <h3><i class="fas fa-list"></i> File yang Dipilih</h3>
+                <div id="fileList">
+                    <div class="empty-message" style="text-align: center; color: #999; padding: 20px;">
+                        Belum ada file yang dipilih
+                    </div>
+                </div>
+            </div>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Mempersiapkan kompresi...</div>
+            </div>
+            
+            <div class="result" id="resultContainer">
+                <i class="fas fa-check-circle"></i>
+                <h3>File ZIP Berhasil Dibuat!</h3>
+                <p id="resultMessage">File ZIP Anda siap diunduh.</p>
+                <a class="btn" id="downloadLink" style="margin-top: 15px;">
+                    <i class="fas fa-download"></i> Unduh File ZIP
+                </a>
+            </div>
+            
+            <div class="controls">
+                <button class="btn-secondary" id="clearFilesBtn">
+                    <i class="fas fa-trash-alt"></i> Hapus Semua File
+                </button>
+                <button class="btn" id="compressBtn">
+                    <i class="fas fa-compress-alt"></i> Kompres ke ZIP
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Kompresor File ke ZIP &copy; 2024 - Semua metadata file dipertahankan</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        // Elemen DOM
+        const fileInput = document.getElementById('fileInput');
+        const selectFilesBtn = document.getElementById('selectFilesBtn');
+        const dropArea = document.getElementById('dropArea');
+        const fileList = document.getElementById('fileList');
+        const clearFilesBtn = document.getElementById('clearFilesBtn');
+        const compressBtn = document.getElementById('compressBtn');
+        const zipFileNameInput = document.getElementById('zipFileName');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const resultContainer = document.getElementById('resultContainer');
+        const downloadLink = document.getElementById('downloadLink');
+        const resultMessage = document.getElementById('resultMessage');
+        
+        // Data file yang dipilih
+        let selectedFiles = [];
+        
+        // Fungsi untuk memformat ukuran file
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Fungsi untuk mendapatkan ikon berdasarkan tipe file
+        function getFileIcon(filename) {
+            const extension = filename.split('.').pop().toLowerCase();
+            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
+            const docExtensions = ['pdf', 'doc', 'docx', 'txt', 'rtf'];
+            const archiveExtensions = ['zip', 'rar', '7z', 'tar', 'gz'];
+            
+            if (imageExtensions.includes(extension)) return 'far fa-file-image';
+            if (docExtensions.includes(extension)) return 'far fa-file-alt';
+            if (archiveExtensions.includes(extension)) return 'far fa-file-archive';
+            return 'far fa-file';
+        }
+        
+        // Fungsi untuk menampilkan daftar file
+        function renderFileList() {
+            if (selectedFiles.length === 0) {
+                fileList.innerHTML = '<div class="empty-message" style="text-align: center; color: #999; padding: 20px;">Belum ada file yang dipilih</div>';
+                return;
+            }
+            
+            let html = '';
+            selectedFiles.forEach((file, index) => {
+                const fileIcon = getFileIcon(file.name);
+                html += `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <i class="${fileIcon} file-icon"></i>
+                            <div>
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-size">${formatFileSize(file.size)}</div>
+                            </div>
+                        </div>
+                        <button class="remove-file" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            fileList.innerHTML = html;
+            
+            // Tambahkan event listener untuk tombol hapus
+            document.querySelectorAll('.remove-file').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    removeFile(index);
+                });
+            });
+        }
+        
+        // Fungsi untuk menghapus file dari daftar
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            renderFileList();
+        }
+        
+        // Fungsi untuk menambahkan file ke daftar
+        function addFiles(files) {
+            for (let i = 0; i < files.length; i++) {
+                // Hindari duplikat file dengan nama yang sama
+                if (!selectedFiles.some(f => f.name === files[i].name && f.size === files[i].size)) {
+                    selectedFiles.push(files[i]);
+                }
+            }
+            renderFileList();
+        }
+        
+        // Event listener untuk tombol pilih file
+        selectFilesBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        // Event listener untuk input file
+        fileInput.addEventListener('change', (e) => {
+            addFiles(e.target.files);
+            fileInput.value = ''; // Reset input
+        });
+        
+        // Event listener untuk drag and drop
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.style.borderColor = '#2575fc';
+            dropArea.style.backgroundColor = '#e3eeff';
+        });
+        
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.style.borderColor = '#6a11cb';
+            dropArea.style.backgroundColor = '#f8f9ff';
+        });
+        
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.style.borderColor = '#6a11cb';
+            dropArea.style.backgroundColor = '#f8f9ff';
+            
+            const files = e.dataTransfer.files;
+            addFiles(files);
+        });
+        
+        // Event listener untuk tombol hapus semua file
+        clearFilesBtn.addEventListener('click', () => {
+            selectedFiles = [];
+            renderFileList();
+        });
+        
+        // Event listener untuk tombol kompres
+        compressBtn.addEventListener('click', async () => {
+            if (selectedFiles.length === 0) {
+                alert('Pilih setidaknya satu file untuk dikompres!');
+                return;
+            }
+            
+            const zipFileName = zipFileNameInput.value.trim() || 'file-kompres.zip';
+            
+            // Tampilkan progress bar
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = 'Mempersiapkan kompresi...';
+            resultContainer.style.display = 'none';
+            
+            try {
+                const zip = new JSZip();
+                
+                // Tambahkan file ke ZIP
+                for (let i = 0; i < selectedFiles.length; i++) {
+                    const file = selectedFiles[i];
+                    
+                    // Update progress
+                    const progress = ((i + 1) / selectedFiles.length) * 100;
+                    progressFill.style.width = `${progress}%`;
+                    progressText.textContent = `Mengompresi ${i + 1} dari ${selectedFiles.length} file: ${file.name}`;
+                    
+                    // Tambahkan file ke ZIP dengan metadata asli
+                    const fileData = await readFileAsArrayBuffer(file);
+                    zip.file(file.name, fileData, {
+                        binary: true,
+                        date: file.lastModified ? new Date(file.lastModified) : new Date(),
+                        // Metadata lain bisa ditambahkan di sini
+                    });
+                }
+                
+                // Generate file ZIP
+                progressText.textContent = 'Membuat file ZIP...';
+                
+                const zipBlob = await zip.generateAsync({
+                    type: 'blob',
+                    compression: 'DEFLATE',
+                    compressionOptions: {
+                        level: 6
+                    }
+                }, (metadata) => {
+                    // Update progress selama pembuatan ZIP
+                    progressFill.style.width = `${metadata.percent}%`;
+                    progressText.textContent = `Membuat ZIP: ${metadata.percent.toFixed(1)}% selesai`;
+                });
+                
+                // Sembunyikan progress bar, tampilkan hasil
+                progressContainer.style.display = 'none';
+                
+                // Buat URL untuk file ZIP
+                const zipUrl = URL.createObjectURL(zipBlob);
+                
+                // Tampilkan hasil
+                resultMessage.textContent = `${selectedFiles.length} file berhasil dikompresi ke ${zipFileName} (${formatFileSize(zipBlob.size)})`;
+                downloadLink.href = zipUrl;
+                downloadLink.download = zipFileName;
+                resultContainer.style.display = 'block';
+                
+                // Scroll ke hasil
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                console.error('Error creating ZIP:', error);
+                progressText.textContent = 'Terjadi kesalahan saat membuat ZIP';
+                progressFill.style.backgroundColor = '#ff4757';
+                
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    alert('Terjadi kesalahan saat membuat file ZIP. Silakan coba lagi.');
+                }, 1500);
+            }
+        });
+        
+        // Fungsi untuk membaca file sebagai ArrayBuffer
+        function readFileAsArrayBuffer(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsArrayBuffer(file);
+            });
+        }
+        
+        // Set nama file ZIP default dengan tanggal
+        const now = new Date();
+        const dateString = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+        zipFileNameInput.value = `file-kompres-${dateString}.zip`;
+        
+        // Event listener untuk download link
+        downloadLink.addEventListener('click', () => {
+            // Setelah mengunduh, bersihkan URL object setelah 5 menit
+            setTimeout(() => {
+                URL.revokeObjectURL(downloadLink.href);
+            }, 300000);
+        });
+    </script>
+</body>
+</html>
