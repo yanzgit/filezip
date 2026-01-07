@@ -485,18 +485,6 @@
             box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
         }
 
-        .setting-input.error {
-            border-color: var(--danger);
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-        }
-
-        .error-message {
-            color: var(--danger);
-            font-size: 14px;
-            margin-top: 8px;
-            display: none;
-        }
-
         .action-section {
             display: flex;
             justify-content: space-between;
@@ -644,26 +632,29 @@
             color: var(--gray);
         }
 
-        .note-box {
-            background: linear-gradient(to right, #fef3c7, #fef9c3);
+        .filename-display {
+            background: var(--soft-gray);
             border-radius: var(--radius-sm);
-            padding: 20px;
-            margin-top: 24px;
-            border-left: 4px solid var(--accent);
-        }
-
-        .note-title {
+            padding: 16px;
+            margin: 20px 0;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            color: var(--gray-dark);
-            margin-bottom: 8px;
+            justify-content: space-between;
         }
 
-        .note-text {
+        .filename-text {
+            font-weight: 500;
             color: var(--gray-dark);
-            font-size: 14px;
+        }
+
+        .filename-value {
+            font-family: monospace;
+            font-weight: 600;
+            color: var(--primary);
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-light);
         }
 
         footer {
@@ -720,6 +711,12 @@
                 width: 100%;
                 max-width: 250px;
             }
+            
+            .filename-display {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
         }
 
         /* Animations */
@@ -760,7 +757,7 @@
                 <div class="logo-text">ZIP Compressor</div>
             </div>
             <h1 class="tagline">Kompres File & Folder dengan Satu Klik</h1>
-            <p class="subtitle">Pertahankan metadata asli, tanpa kompresi lossy. Cepat, aman, dan elegan.</p>
+            <p class="subtitle">Upload file, kompres ke ZIP, download dengan mudah</p>
         </header>
         
         <main class="main-card">
@@ -799,48 +796,6 @@
                         <button class="btn btn-secondary btn-sm" id="selectFilesBtn">
                             <i class="fas fa-plus"></i> Tambah File
                         </button>
-                    </div>
-                </div>
-                
-                <div class="settings-section">
-                    <h3 class="settings-title">
-                        <i class="fas fa-cog"></i>
-                        Pengaturan ZIP
-                    </h3>
-                    
-                    <div class="settings-grid">
-                        <div class="setting-item">
-                            <label class="setting-label">
-                                <i class="fas fa-file-archive"></i>
-                                Nama File ZIP *
-                            </label>
-                            <input type="text" class="setting-input" id="zipFileName" placeholder="contoh: laporan-bulanan.zip" required>
-                            <div class="error-message" id="nameError">Nama file ZIP harus diisi</div>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <label class="setting-label">
-                                <i class="fas fa-compress-arrows-alt"></i>
-                                Level Kompresi
-                            </label>
-                            <select class="setting-input" id="compressionLevel">
-                                <option value="1">Rendah (Cepat)</option>
-                                <option value="3">Sedang</option>
-                                <option value="6" selected>Tinggi (Rekomendasi)</option>
-                                <option value="9">Maksimum</option>
-                            </select>
-                        </div>
-                        
-                        <div class="setting-item">
-                            <label class="setting-label">
-                                <i class="fas fa-folder"></i>
-                                Struktur Folder
-                            </label>
-                            <select class="setting-input" id="folderStructure">
-                                <option value="preserve" selected>Pertahankan Struktur Asli</option>
-                                <option value="flatten">Satukan Semua File</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 
@@ -898,40 +853,37 @@
                         </div>
                     </div>
                     
-                    <div style="margin-bottom: 20px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                    <div class="filename-display">
+                        <div class="filename-text">
+                            <i class="fas fa-file-archive"></i> Nama file:
+                        </div>
+                        <div class="filename-value" id="generatedFileName">file.zip</div>
+                    </div>
+                    
+                    <div style="margin: 20px 0; max-width: 400px; margin-left: auto; margin-right: auto;">
                         <div class="setting-item">
                             <label class="setting-label">
-                                <i class="fas fa-download"></i>
-                                Nama file untuk download *
+                                <i class="fas fa-edit"></i>
+                                Ubah nama file (opsional)
                             </label>
-                            <input type="text" class="setting-input" id="downloadFileName" placeholder="contoh: hasil-kompresi.zip" required>
-                            <div class="error-message" id="downloadNameError">Nama file untuk download harus diisi</div>
+                            <input type="text" class="setting-input" id="customFileName" placeholder="Kosongkan untuk pakai nama default">
                         </div>
                     </div>
                     
-                    <button class="btn btn-primary" id="downloadBtn" disabled>
-                        <i class="fas fa-download"></i> Unduh File ZIP
-                    </button>
-                </div>
-                
-                <div class="note-box">
-                    <div class="note-title">
-                        <i class="fas fa-info-circle"></i>
-                        Informasi Penting
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                        <button class="btn btn-secondary" id="newFilesBtn">
+                            <i class="fas fa-plus"></i> File Baru
+                        </button>
+                        <button class="btn btn-primary" id="downloadBtn">
+                            <i class="fas fa-download"></i> Download ZIP
+                        </button>
                     </div>
-                    <p class="note-text">Semua metadata file (tanggal modifikasi, izin akses, dll.) akan dipertahankan dalam file ZIP. Proses kompresi dilakukan sepenuhnya di browser Anda, sehingga file Anda tetap aman dan privat. File akan otomatis dihapus dari memori setelah diunduh.</p>
                 </div>
             </div>
         </main>
         
         <footer>
-            <p>ZIP Compressor &copy; 2024 • Dibuat dengan <i class="fas fa-heart" style="color: #ef4444;"></i></p>
-            <div class="footer-links">
-                <a href="#" class="footer-link">Tentang</a>
-                <a href="#" class="footer-link">Privasi</a>
-                <a href="#" class="footer-link">Bantuan</a>
-                <a href="#" class="footer-link">Kontak</a>
-            </div>
+            <p>ZIP Compressor &copy; 2024 • File aman, proses di browser Anda</p>
         </footer>
     </div>
 
@@ -945,8 +897,6 @@
         const fileCount = document.getElementById('fileCount');
         const clearFilesBtn = document.getElementById('clearFilesBtn');
         const compressBtn = document.getElementById('compressBtn');
-        const zipFileNameInput = document.getElementById('zipFileName');
-        const downloadFileNameInput = document.getElementById('downloadFileName');
         const totalSizeElement = document.getElementById('totalSize');
         const progressSection = document.getElementById('progressSection');
         const progressFill = document.getElementById('progressFill');
@@ -957,17 +907,17 @@
         const resultFileCount = document.getElementById('resultFileCount');
         const resultZipSize = document.getElementById('resultZipSize');
         const resultRatio = document.getElementById('resultRatio');
+        const generatedFileName = document.getElementById('generatedFileName');
+        const customFileName = document.getElementById('customFileName');
         const downloadBtn = document.getElementById('downloadBtn');
-        const compressionLevelSelect = document.getElementById('compressionLevel');
-        const folderStructureSelect = document.getElementById('folderStructure');
-        const nameError = document.getElementById('nameError');
-        const downloadNameError = document.getElementById('downloadNameError');
+        const newFilesBtn = document.getElementById('newFilesBtn');
         
         // Variabel state
         let selectedFiles = [];
         let totalSize = 0;
         let currentZipBlob = null;
         let currentZipUrl = null;
+        let autoGeneratedName = '';
         
         // Generate nama random untuk file
         function generateRandomFileName() {
@@ -1021,20 +971,8 @@
             totalSizeElement.textContent = formatFileSize(totalSize);
             fileCount.textContent = `${selectedFiles.length} File`;
             
-            // Reset kolom nama saat file berubah
-            if (selectedFiles.length > 0) {
-                zipFileNameInput.value = generateRandomFileName();
-                downloadFileNameInput.value = zipFileNameInput.value;
-            } else {
-                zipFileNameInput.value = '';
-                downloadFileNameInput.value = '';
-            }
-            
-            // Reset error
-            zipFileNameInput.classList.remove('error');
-            nameError.style.display = 'none';
-            downloadFileNameInput.classList.remove('error');
-            downloadNameError.style.display = 'none';
+            // Reset kolom custom name
+            customFileName.value = '';
             
             // Render daftar file
             if (selectedFiles.length === 0) {
@@ -1088,6 +1026,9 @@
             // Bersihkan cache file sebelumnya
             cleanupPreviousFiles();
             
+            // Sembunyikan result section jika ada
+            resultSection.style.display = 'none';
+            
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 
@@ -1110,23 +1051,6 @@
             }
             
             updateFileDisplay();
-        }
-        
-        // Validasi form
-        function validateForm() {
-            let isValid = true;
-            
-            // Validasi nama file ZIP
-            if (!zipFileNameInput.value.trim()) {
-                zipFileNameInput.classList.add('error');
-                nameError.style.display = 'block';
-                isValid = false;
-            } else {
-                zipFileNameInput.classList.remove('error');
-                nameError.style.display = 'none';
-            }
-            
-            return isValid;
         }
         
         // Event listener untuk tombol pilih file
@@ -1180,14 +1104,8 @@
                 return;
             }
             
-            if (!validateForm()) {
-                alert('Harap isi nama file ZIP terlebih dahulu!');
-                return;
-            }
-            
-            const zipFileName = zipFileNameInput.value.trim();
-            const compressionLevel = parseInt(compressionLevelSelect.value);
-            const folderStructure = folderStructureSelect.value;
+            // Generate nama file otomatis
+            autoGeneratedName = generateRandomFileName();
             
             // Sembunyikan hasil sebelumnya, tampilkan progress
             resultSection.style.display = 'none';
@@ -1220,14 +1138,8 @@
                         date: file.lastModified ? new Date(file.lastModified) : new Date(),
                     };
                     
-                    // Tambahkan berdasarkan struktur folder
-                    if (folderStructure === 'flatten') {
-                        // Semua file di root folder
-                        zip.file(file.name, fileData, zipOptions);
-                    } else {
-                        // Pertahankan struktur folder
-                        zip.file(file.name, fileData, zipOptions);
-                    }
+                    // Tambahkan file ke ZIP
+                    zip.file(file.name, fileData, zipOptions);
                 }
                 
                 // Generate file ZIP
@@ -1237,7 +1149,7 @@
                     type: 'blob',
                     compression: 'DEFLATE',
                     compressionOptions: {
-                        level: compressionLevel
+                        level: 6
                     }
                 }, (metadata) => {
                     // Update progress selama pembuatan ZIP
@@ -1259,13 +1171,9 @@
                 resultFileCount.textContent = selectedFiles.length;
                 resultZipSize.textContent = formatFileSize(zipSize);
                 resultRatio.textContent = `${savings}%`;
-                resultDesc.textContent = `${selectedFiles.length} file berhasil dikompresi menjadi ${zipFileName} (${formatFileSize(zipSize)})`;
-                
-                // Reset form download
-                downloadFileNameInput.value = zipFileName;
-                downloadFileNameInput.classList.remove('error');
-                downloadNameError.style.display = 'none';
-                downloadBtn.disabled = true;
+                resultDesc.textContent = `${selectedFiles.length} file berhasil dikompresi (${formatFileSize(zipSize)})`;
+                generatedFileName.textContent = autoGeneratedName;
+                customFileName.value = '';
                 
                 // Tampilkan hasil dengan animasi
                 resultSection.style.display = 'block';
@@ -1295,33 +1203,23 @@
             });
         }
         
-        // Event listener untuk validasi nama file download
-        downloadFileNameInput.addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.classList.remove('error');
-                downloadNameError.style.display = 'none';
-                downloadBtn.disabled = false;
-            } else {
-                this.classList.add('error');
-                downloadNameError.style.display = 'block';
-                downloadBtn.disabled = true;
-            }
-        });
-        
         // Event listener untuk tombol download
         downloadBtn.addEventListener('click', function() {
-            if (!downloadFileNameInput.value.trim()) {
-                downloadFileNameInput.classList.add('error');
-                downloadNameError.style.display = 'block';
-                return;
-            }
-            
             if (!currentZipBlob) {
                 alert('File ZIP belum tersedia. Silakan kompres file terlebih dahulu.');
                 return;
             }
             
-            const fileName = downloadFileNameInput.value.trim();
+            // Tentukan nama file
+            let fileName = customFileName.value.trim();
+            if (!fileName) {
+                fileName = autoGeneratedName;
+            }
+            
+            // Pastikan punya ekstensi .zip
+            if (!fileName.toLowerCase().endsWith('.zip')) {
+                fileName += '.zip';
+            }
             
             // Buat URL untuk file ZIP
             currentZipUrl = URL.createObjectURL(currentZipBlob);
@@ -1329,7 +1227,7 @@
             // Buat elemen download
             const a = document.createElement('a');
             a.href = currentZipUrl;
-            a.download = fileName.endsWith('.zip') ? fileName : fileName + '.zip';
+            a.download = fileName;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1337,22 +1235,23 @@
             // Bersihkan cache setelah download
             setTimeout(() => {
                 cleanupPreviousFiles();
-                
-                // Reset form
-                selectedFiles = [];
-                updateFileDisplay();
-                resultSection.style.display = 'none';
-                
-                alert('File berhasil diunduh! Memori telah dibersihkan.');
+                alert(`File "${fileName}" berhasil diunduh!`);
             }, 100);
         });
         
-        // Event listener untuk validasi nama file ZIP
-        zipFileNameInput.addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.classList.remove('error');
-                nameError.style.display = 'none';
-            }
+        // Event listener untuk tombol file baru
+        newFilesBtn.addEventListener('click', function() {
+            // Reset semua
+            selectedFiles = [];
+            cleanupPreviousFiles();
+            updateFileDisplay();
+            resultSection.style.display = 'none';
+            
+            // Reset file input
+            fileInput.value = '';
+            
+            // Scroll ke atas
+            document.querySelector('.upload-area').scrollIntoView({ behavior: 'smooth' });
         });
         
         // Inisialisasi tampilan
